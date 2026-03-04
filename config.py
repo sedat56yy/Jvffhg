@@ -4,8 +4,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-BOT_TOKEN         = os.getenv("8796552651:AAGqUIttCQFmF6EoM4RyGkbf2oKsiCfhZMk")
-ADMIN_IDS         = [int(x.strip()) for x in os.getenv("5839948259", "").split(",") if x.strip().isdigit()]
+BOT_TOKEN         = os.getenv("BOT_TOKEN", "")
+ADMIN_IDS         = [int(x.strip()) for x in os.getenv("ADMIN_IDS", "").split(",") if x.strip().isdigit()]
 LOG_CHANNEL       = os.getenv("LOG_CHANNEL", "@nikestoretr")
 FOUNDER_USERNAME  = os.getenv("FOUNDER", "@nikecheatyeniden")
 CHANNEL_USERNAME  = os.getenv("CHANNEL", "@nikestoretr")
