@@ -1,3 +1,4 @@
+
 """
 admin_cmds.py — Gizli Admin Komutları
 /adminlist /kban /banu /mute /umute /log
@@ -202,9 +203,18 @@ def register(bot: telebot.TeleBot) -> None:  # type: ignore[name-defined]
         if uid not in config.ADMIN_IDS:
             return
 
-        text = message.text[4:].strip() or "Manuel log kaydı"
-        send_log(
-            bot, 'manual', message.from_user,
-            state.get(uid), extra=text
-        )
-        bot.reply_to(message, "✅ Log kanalına gönderildi!")
+        # /log @kanal mesaj — eğer @ varsa oraya, yoksa LOG_CHANNEL'a gönder
+        parts = message.text.split(None, 2)
+        target_channel = config.LOG_CHANNEL
+        log_text = "Manuel log kaydı"
+        if len(parts) >= 2 and parts[1].startswith("@"):
+            target_channel = parts[1]
+            log_text = parts[2] if len(parts) > 2 else "Manuel log kaydı"
+        elif len(parts) >= 2:
+            log_text = " ".join(parts[1:])
+        # Geçici olarak LOG_CHANNEL'ı değiştir
+        original = config.LOG_CHANNEL
+        config.LOG_CHANNEL = target_channel
+        send_log(bot, 'manual', message.from_user, state.get(uid), extra=log_text)
+        config.LOG_CHANNEL = original
+        bot.reply_to(message, f"✅ Log {target_channel} kanalına gönderildi!")
